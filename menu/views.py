@@ -1,3 +1,9 @@
+# menu/views.py
 from django.shortcuts import render
 
-# Create your views here.
+import os
+from django.conf import settings
+from django.shortcuts import render
+
+def menu_choice(request):
+    return render(request, 'menu.html')

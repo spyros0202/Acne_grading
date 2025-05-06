@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Image Upload & ROI{% endblock %}
+
+{% block content %}
+<div class="container py-5">
+    <div class="card shadow-lg">
+        <div class="card-body text-center">
+            <h2 class="card-title mb-4">Upload Image & Select ROI</h2>
+
+            <form id="uploadForm" method="POST" enctype="multipart/form-data" class="mb-3">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <input type="file" id="imageFile" name="image" accept="image/*" required class="form-control">
+                </div>
+                <button type="submit" class="btn btn-primary px-4">Submit</button>
+            </form>
+
+            <div class="d-flex justify-content-center">
+                <canvas id="canvas" width="600" height="600" style="display:none; border: 2px dashed #0d6efd; border-radius: 8px; cursor: crosshair; max-width: 100%; margin-top: 1rem;"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    const imageInput = document.getElementById('imageFile');
+    const canvas = document.getElementById('canvas');
+    const ctx = canvas.getContext('2d');
+    const image = new Image();
+    let rois = [];
+
+    let imageLoaded = false;
+
+    imageInput.addEventListener('change', function(e) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+            image.onload = function() {
+                canvas.width = image.width;
+                canvas.height = image.height;
+                ctx.drawImage(image, 0, 0);
+                canvas.style.display = 'block';
+                imageLoaded = true;
+            };
+            image.src = event.target.result;
+        };
+        reader.readAsDataURL(e.target.files[0]);
+    });
+
+    canvas.addEventListener('mousedown', function(e) {
+        if (!imageLoaded) return;
+
+        const rect = canvas.getBoundingClientRect();
+        const centerX = e.clientX - rect.left;
+        const centerY = e.clientY - rect.top;
+
+        const roiWidth = 50;
+        const roiHeight = 50;
+
+        const topLeftX = centerX - roiWidth / 2;
+        const topLeftY = centerY - roiHeight / 2;
+
+        // Save ROI
+        rois.push([topLeftX, topLeftY, topLeftX + roiWidth, topLeftY + roiHeight]);
+
+        // Redraw everything (image + all ROIs)
+        redrawCanvas();
+    });
+
+    function redrawCanvas() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(image, 0, 0);
+
+        ctx.strokeStyle = "red";
+        ctx.lineWidth = 2;
+
+        for (const [x1, y1, x2, y2] of rois) {
+            ctx.strokeRect(x1, y1, x2 - x1, y2 - y1);
+        }
+    }
+
+    document.getElementById('uploadForm').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const formData = new FormData(this);
+        formData.append("rois", JSON.stringify(rois));
+
+        fetch("{% url 'classify_image' %}", {
+            method: "POST",
+            body: formData,
+        }).then(res => res.json()).then(data => {
+            alert("Results: " + JSON.stringify(data));
+        });
+    });
+</script>
+{% endblock %}
