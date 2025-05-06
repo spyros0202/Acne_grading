@@ -15,11 +15,13 @@
                     <input type="file" id="imageFile" name="image" accept="image/*" required class="form-control">
                 </div>
                 <button type="submit" class="btn btn-primary px-4">Submit</button>
+                <button type="button" class="btn btn-warning px-4" id="matrixButton">Matrix Mode</button>
             </form>
 
             <div class="d-flex justify-content-center">
                 <canvas id="canvas" width="600" height="600" style="display:none; border: 2px dashed #0d6efd; border-radius: 8px; cursor: crosshair; max-width: 100%; margin-top: 1rem;"></canvas>
             </div>
+            <div id="errorMsg" class="text-danger mt-3 fw-bold"></div>
         </div>
     </div>
 </div>
@@ -27,12 +29,13 @@
 
 {% block scripts %}
 <script>
+    let useMatrixMode = false;
+
     const imageInput = document.getElementById('imageFile');
     const canvas = document.getElementById('canvas');
     const ctx = canvas.getContext('2d');
     const image = new Image();
     let rois = [];
-
     let imageLoaded = false;
 
     imageInput.addEventListener('change', function(e) {
@@ -44,6 +47,7 @@
                 ctx.drawImage(image, 0, 0);
                 canvas.style.display = 'block';
                 imageLoaded = true;
+                rois = [];
             };
             image.src = event.target.result;
         };
@@ -51,48 +55,103 @@
     });
 
     canvas.addEventListener('mousedown', function(e) {
-        if (!imageLoaded) return;
-
+        if (!imageLoaded || useMatrixMode) return;
         const rect = canvas.getBoundingClientRect();
-        const centerX = e.clientX - rect.left;
-        const centerY = e.clientY - rect.top;
-
-        const roiWidth = 50;
-        const roiHeight = 50;
-
-        const topLeftX = centerX - roiWidth / 2;
-        const topLeftY = centerY - roiHeight / 2;
-
-        // Save ROI
-        rois.push([topLeftX, topLeftY, topLeftX + roiWidth, topLeftY + roiHeight]);
-
-        // Redraw everything (image + all ROIs)
-        redrawCanvas();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        const roi = [x - 25, y - 25, x + 25, y + 25];
+        rois = [roi];
+        drawROIs(rois);
     });
 
-    function redrawCanvas() {
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(image, 0, 0);
-
-        ctx.strokeStyle = "red";
-        ctx.lineWidth = 2;
-
-        for (const [x1, y1, x2, y2] of rois) {
-            ctx.strokeRect(x1, y1, x2 - x1, y2 - y1);
+    document.getElementById("matrixButton").addEventListener("click", () => {
+        if (rois.length === 0) {
+            alert("Draw a central rectangle first.");
+            return;
         }
-    }
+        useMatrixMode = true;
+        document.getElementById("uploadForm").requestSubmit();
+    });
 
     document.getElementById('uploadForm').addEventListener('submit', function(e) {
         e.preventDefault();
         const formData = new FormData(this);
         formData.append("rois", JSON.stringify(rois));
+        formData.append("matrix", useMatrixMode);
+        const errorDiv = document.getElementById('errorMsg');
+        errorDiv.innerHTML = "";
 
         fetch("{% url 'classify_image' %}", {
             method: "POST",
             body: formData,
-        }).then(res => res.json()).then(data => {
-            alert("Results: " + JSON.stringify(data));
+        })
+        .then(res => res.json())
+        .then(data => {
+            const isMatrix = useMatrixMode;
+            useMatrixMode = false;
+            if (data.error) {
+                errorDiv.innerHTML = "⚠️ " + data.error;
+                return;
+            }
+
+            if (data.summary) {
+                const s = data.summary;
+                errorDiv.innerHTML = `
+                    <div class="mt-3">
+                        <span style="color:green;">Healthy: ${s["Healthy"]}%</span><br>
+                        <span style="color:orange;">Low Level: ${s["Low Level"]}%</span><br>
+                        <span style="color:red;">High Level: ${s["High Level"]}%</span>
+                    </div>
+                `;
+            }
+
+            rois = data.rois;
+            drawLabeledROIs(rois, data.results, isMatrix);
         });
     });
+
+    function drawROIs(rois) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(image, 0, 0);
+        ctx.strokeStyle = "red";
+        ctx.lineWidth = 2;
+        rois.forEach(([x1, y1, x2, y2]) => {
+            ctx.strokeRect(x1, y1, x2 - x1, y2 - y1);
+        });
+    }
+
+    function drawLabeledROIs(rois, results, isMatrixMode = false) {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+        ctx.drawImage(image, 0, 0);
+        ctx.font = "16px Arial";
+        ctx.textBaseline = "top";
+
+        Object.entries(results).forEach(([i, label]) => {
+            const [x1, y1, x2, y2] = rois[i];
+            let baseColor = "0, 0, 255";  // fallback: blue
+
+            if (label.toLowerCase().includes("healthy")) {
+                baseColor = "0, 128, 0";  // green
+            } else if (label.toLowerCase().includes("low")) {
+                baseColor = "255, 165, 0";  // orange
+            } else if (label.toLowerCase().includes("high")) {
+                baseColor = "255, 0, 0";  // red
+            }
+
+            // Fill the ROI
+            ctx.fillStyle = `rgba(${baseColor}, 0.25)`;
+            ctx.fillRect(x1, y1, x2 - x1, y2 - y1);
+
+            // Skip text in matrix mode
+            if (!isMatrixMode) {
+                ctx.fillStyle = `rgb(${baseColor})`;
+                ctx.fillText(label, x1, y2 + 2);
+            }
+        });
+    }
+
+
+
 </script>
+
 {% endblock %}
