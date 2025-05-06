@@ -1,0 +1,56 @@
+# Python bytecode files
+*.pyc
+*.pyo
+*.pyd
+__pycache__/
+
+# Virtual environment directories
+myenv/
+venv/
+.env/
+*.env
+
+# IDE/editor configuration files (e.g., VS Code, PyCharm)
+.vscode/
+.idea/
+
+# Mac system files
+.DS_Store
+
+# Windows system files
+Thumbs.db
+
+# Logs
+*.log
+
+# Notes
+*.txt
+*.docx
+
+# PKL files
+*.pkl
+
+# Unit test result files
+nosetests.xml
+coverage.xml
+*.cover
+*.hypothesis/
+
+# Jupyter notebook checkpoints
+.ipynb_checkpoints/
+
+# .env file containing environment variables
+.env
+
+# Package distributions
+*.egg
+*.egg-info/
+dist/
+build/
+*.txt
+*.csv
+*.smi
+
+mydatabase
+mydatabase
+*.rar
