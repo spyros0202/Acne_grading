@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Welcome{% endblock %}
+
+{% block content %}
+<div class="container text-center mt-5">
+    <h2 class="mb-3">👋 Welcome to the Acne Health Classifier</h2>
+    <p class="lead mb-4">Log in or register to start analyzing skin health based on image regions.</p>
+    <div class="d-flex justify-content-center gap-3">
+        <a href="{% url 'users:register' %}" class="btn btn-outline-primary btn-lg">Register</a>
+        <a href="{% url 'users:login' %}" class="btn btn-primary btn-lg">Login</a>
+    </div>
+</div>
+{% endblock %}

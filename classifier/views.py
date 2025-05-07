@@ -5,9 +5,12 @@ import numpy as np
 import json
 import joblib
 import os
+from django.contrib.auth.decorators import login_required
 
 from classifier import module_feat_generation2 as fg2
 from classifier import module_feat_generation3 as fg3
+
+@login_required
 
 def classify_image(request):
     if request.method == 'POST':
