@@ -14,11 +14,26 @@
 </head>
 <body class="bg-light d-flex flex-column min-vh-100">
     <header class="bg-primary text-white py-4 mb-4 shadow">
-    <div class="container text-center">
-        <h1 class="mb-0">🧪 Acne Classifier</h1>
-            <p class="lead mb-0">Region-Based Skin Health Analysis</p>
-    </div>
+      <div class="container position-relative">
+
+        <!-- Centered Title -->
+        <div class="text-center">
+          <h1 class="mb-0">🧪 Acne Classifier</h1>
+          <p class="lead mb-0">Region-Based Skin Health Analysis</p>
+        </div>
+
+        <!-- Logout in top-right corner -->
+        {% if user.is_authenticated %}
+          <div class="position-absolute top-0 end-0 mt-3 me-3 text-end">
+            <p class="mb-1">👤 {{ user.username }}</p>
+            <a href="{% url 'users:logout' %}" class="btn btn-light btn-sm text-dark">Logout</a>
+          </div>
+        {% endif %}
+
+      </div>
     </header>
+
+
 
     <main class="flex-fill">
         {% block content %}

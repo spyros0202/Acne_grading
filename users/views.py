@@ -40,8 +40,13 @@ def register(request):
         form = UserForm(request.POST)
 
         if form.is_valid():
-            form.save()
-            return redirect("bmi_calc:show")
+            user = form.save()
+            username = form.cleaned_data.get('username')
+            raw_password = form.cleaned_data.get('password1')
+            user = authenticate(request, username=username, password=raw_password)
+            if user is not None:
+                login(request, user)
+                return redirect("menu:menu_home")
 
 
     context={'registerform': form}
