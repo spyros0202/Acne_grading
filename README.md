@@ -56,6 +56,8 @@ cd Ance_project
 Create a new conda environment:
 ```bash
 conda create -n acne_project python=3.11
+```
+```bash
 conda activate acne_project
 ```
 
