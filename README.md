@@ -92,7 +92,7 @@ It was built using **PyInstaller** and bundles the GUI app + ML models.
 
 ## 🖼 Example Images
 
-The repository also includes an **`images/`** folder with sample images.  
+The repository also includes an **`Images/`** folder with sample images.  
 You can use these as test inputs to quickly try out the web app or the standalone GUI.
 
 ---
