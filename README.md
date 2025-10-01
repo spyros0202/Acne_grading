@@ -103,4 +103,3 @@ For demonstration purposes, **authentication and login have been deactivated** i
 The project is configured to automatically connect with a default demo user so that anyone running it (via Docker or locally) can immediately test the application without needing to register or log in.
 
 This is intentional, to simplify evaluation and testing of the thesis project.  
-In a real production environment, proper user authentication and access control should be enabled again.
