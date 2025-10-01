@@ -1,0 +1,34 @@
+# Python cache
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Virtual environments
+venv/
+env/
+*.egg-info/
+
+# OS / IDE files
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/
+
+# Git
+.git/
+.gitignore
+
+# Django stuff
+db.sqlite3
+media/
+staticfiles/
+
+# Build / dist
+*.exe
+*.spec
+dist/
+build/
+
+# Jupyter
+*.ipynb_checkpoints/
