@@ -12,6 +12,14 @@ It also includes:
 ### Prerequisites
 - Install [Docker](https://docs.docker.com/get-docker/)  
 - Install [Docker Compose v2](https://docs.docker.com/compose/install/)  
+- Git
+
+### Setup
+Clone the repository:
+```bash
+git clone https://github.com/spyros0202/Ance_project.git
+cd Ance_project
+```
 
 ### Build and Run
 From the project root:
