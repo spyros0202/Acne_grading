@@ -26,7 +26,6 @@
     </div>
 </div>
 {% endblock %}
-
 {% block scripts %}
 <script>
     let useMatrixMode = false;
@@ -42,12 +41,21 @@
         const reader = new FileReader();
         reader.onload = function(event) {
             image.onload = function() {
-                canvas.width = image.width;
-                canvas.height = image.height;
-                ctx.drawImage(image, 0, 0);
+                // --- Clear everything when a new image loads ---
+                rois = [];
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                document.getElementById("errorMsg").innerHTML = "";
+
+                // --- Scale image to fit in max 400px box ---
+                const maxSize = 700;
+                const scale = Math.min(maxSize / image.width, maxSize / image.height, 1);
+
+                canvas.width = image.width * scale;
+                canvas.height = image.height * scale;
+
+                ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
                 canvas.style.display = 'block';
                 imageLoaded = true;
-                rois = [];
             };
             image.src = event.target.result;
         };
@@ -112,7 +120,7 @@
 
     function drawROIs(rois) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(image, 0, 0);
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
         ctx.strokeStyle = "red";
         ctx.lineWidth = 2;
         rois.forEach(([x1, y1, x2, y2]) => {
@@ -122,7 +130,7 @@
 
     function drawLabeledROIs(rois, results, isMatrixMode = false) {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
-        ctx.drawImage(image, 0, 0);
+        ctx.drawImage(image, 0, 0, canvas.width, canvas.height);
         ctx.font = "16px Arial";
         ctx.textBaseline = "top";
 
@@ -138,20 +146,14 @@
                 baseColor = "255, 0, 0";  // red
             }
 
-            // Fill the ROI
             ctx.fillStyle = `rgba(${baseColor}, 0.25)`;
             ctx.fillRect(x1, y1, x2 - x1, y2 - y1);
 
-            // Skip text in matrix mode
             if (!isMatrixMode) {
                 ctx.fillStyle = `rgb(${baseColor})`;
                 ctx.fillText(label, x1, y2 + 2);
             }
         });
     }
-
-
-
 </script>
-
 {% endblock %}
