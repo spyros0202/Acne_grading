@@ -26,9 +26,6 @@ Thumbs.db
 # Notes
 *.docx
 
-# PKL files
-*.pkl
-
 # Unit test result files
 nosetests.xml
 coverage.xml
