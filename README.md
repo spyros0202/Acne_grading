@@ -26,7 +26,7 @@ docker compose up --build
 ```
 
 The app will be available at:  
-👉 [http://127.0.0.1:8000](http://127.0.0.1:8000)
+👉 http://127.0.0.1:8000
 
 Stop containers:
 ```bash
@@ -75,18 +75,25 @@ python manage.py runserver
 ```
 
 The app will be available at:  
-👉 [http://127.0.0.1:8000](http://127.0.0.1:8000)
+👉 http://127.0.0.1:8000
 
 ---
-
 
 ## 📦 Standalone `.exe` (PyInstaller)
 
 If you don’t want to install Python or dependencies, a standalone Windows `.exe` is available.  
-It was built using **PyInstaller** and bundles the GUI app + ML models. 
+It was built using **PyInstaller** and bundles the GUI app + ML models.  
 
-Contact with me for that version.
- runs on Windows. For Linux/macOS, use Docker or Conda setup.
+📩 Contact me if you would like the executable version.  
+
+⚠️ The `.exe` only runs on Windows. For Linux/macOS, use Docker or Conda setup.
+
+---
+
+## 🖼 Example Images
+
+The repository also includes an **`images/`** folder with sample images.  
+You can use these as test inputs to quickly try out the web app or the standalone GUI.
 
 ---
 
@@ -94,5 +101,3 @@ Contact with me for that version.
 - **Static files** are stored in `/static` and collected into `/staticfiles` during Docker builds.  
 - **Database**: Default is SQLite (`db.sqlite3`).  
 - **Gunicorn** is used in Docker for production.  
-
----
