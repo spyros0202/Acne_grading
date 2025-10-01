@@ -1,9 +1,6 @@
 # 🧪 Acne Project
 
 Acne Project is a Django-based web application for **skin health classification** (Healthy / Low / High level) using region-based image analysis.  
-It also includes:  
-- A **Tkinter GUI** app (`health_low_high_UI_changes.py`)  
-- A **prebuilt `.exe` file** (via PyInstaller) for users who want a standalone desktop version without Python.
 
 ---
 
