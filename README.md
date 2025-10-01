@@ -95,4 +95,11 @@ You can use these as test inputs to quickly try out the web app or the standalon
 ## 🛠 Development Notes
 - **Static files** are stored in `/static` and collected into `/staticfiles` during Docker builds.  
 - **Database**: Default is SQLite (`db.sqlite3`).  
-- **Gunicorn** is used in Docker for production.  
+- **Gunicorn** is used in Docker for production.
+
+## 🔑 Authentication Notice
+
+For demonstration purposes, **authentication and login have been deactivated** in this repository.  
+The project is configured to automatically connect with a default demo user so that anyone running it (via Docker or locally) can immediately test the application without needing to register or log in.
+
+This is intentional, to simplify evaluation and testing of the thesis project.  
