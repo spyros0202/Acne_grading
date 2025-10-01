@@ -20,7 +20,6 @@ Thumbs.db
 .gitignore
 
 # Django stuff
-db.sqlite3
 media/
 staticfiles/
 
