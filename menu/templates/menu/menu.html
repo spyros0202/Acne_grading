@@ -5,13 +5,26 @@
 {% block content %}
 <div class="text-center mt-5">
     <h2 class="mb-4">Welcome to the Acne Health Classification System</h2>
-    <p class="mb-5 fs-5">Analyze skin regions and get predictions for Healthy, Low Level, or High Level skin conditions.</p>
+    <p class="mb-4 fs-5">
+        Analyze skin regions and get predictions for <strong>Healthy</strong>,
+        <strong>Low Level</strong>, or <strong>High Level</strong> skin conditions.
+    </p>
 
-    <div class="d-flex justify-content-center flex-wrap gap-3">
+    <!-- Instructions -->
+    <div class="alert alert-info text-start mx-auto" style="max-width:700px;">
+        <h5 class="fw-bold">ℹ️ How it works:</h5>
+        <ul class="mb-0">
+            <li><strong>Classify</strong>: Upload an image, draw a rectangle (ROI) by clicking on a skin region,
+                and press <em>Classify</em> to classify that region.</li>
+            <li><strong>Matrix Mode</strong>: First, draw a central rectangle. When you click <em>Matrix Mode</em>, the system automatically generates a grid of regions around it, classifies each one, and displays the percentage results below the image.</li>
+        </ul>
+    </div>
+
+    <!-- Start button -->
+    <div class="d-flex justify-content-center flex-wrap gap-3 mt-4">
         <a href="{% url 'classify_image' %}" class="btn btn-success btn-lg">
             Let's start!
         </a>
-
     </div>
 </div>
 {% endblock %}
