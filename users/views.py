@@ -3,8 +3,11 @@ from . forms import UserForm, LoginForm
 from django.contrib.auth import authenticate, login ,logout
 
 def homepage(request):
-
-    return render(request, 'users/home.html', {})
+    if not request.user.is_authenticated:
+        user = authenticate(username="demo", password="demo123")
+        if user:
+            login(request, user)
+    return redirect("/menu/")
 
 
 # users/views.py
