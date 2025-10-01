@@ -82,26 +82,14 @@ The app will be available at:
 
 ---
 
-## 💻 Tkinter GUI App
-
-For a local **desktop interface**, run:
-```bash
-python health_low_high_UI_changes.py
-```
-
-This opens a Tkinter window where you can load images, draw ROIs, and get classifications with sound effects.
-
----
 
 ## 📦 Standalone `.exe` (PyInstaller)
 
 If you don’t want to install Python or dependencies, a standalone Windows `.exe` is available.  
-It was built using **PyInstaller** and bundles the GUI app + ML models.  
+It was built using **PyInstaller** and bundles the GUI app + ML models. 
 
-- Just double-click the `.exe` to launch the ROI-based Acne Classifier.  
-- No Python installation is required.
-
-> ⚠️ Note: The `.exe` only runs on Windows. For Linux/macOS, use Docker or Conda setup.
+Contact with me for that version.
+ runs on Windows. For Linux/macOS, use Docker or Conda setup.
 
 ---
 
